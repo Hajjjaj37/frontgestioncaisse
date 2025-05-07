@@ -14,6 +14,14 @@ import EditTax from './components/dashboard/EditTax';
 import EditProduct from './components/dashboard/EditProduct';
 import ProductDetail from './components/dashboard/ProductDetail';
 import Employee from './components/dashboard/Employee';
+import AddEmployee from './components/dashboard/AddEmployee';
+import EditEmployee from './components/dashboard/EditEmployee';
+import Pause from './components/dashboard/Pause';
+import AddBreak from './components/dashboard/AddBreak';
+import EditBreak from './components/dashboard/EditBreak';
+import Vacation from './components/dashboard/Vacation';
+import AddVacation from './components/dashboard/AddVacation';
+import EditVacation from './components/dashboard/EditVacation';
 import './App.css';
 
 // Pages components
@@ -56,6 +64,11 @@ function App() {
                       <Route path="/products" element={<Products />} />
                       <Route path="/products/add" element={<AddProduct />} />
                       <Route path="/employees" element={<Employee />} />
+                      <Route path="/employees/add" element={<AddEmployee />} />
+                      <Route path="/employees/edit/:id" element={<EditEmployee />} />
+                      <Route path="/pause" element={<Pause />} />
+                      <Route path="/pause/add/:employeeId" element={<AddBreak />} />
+                      <Route path="/pause/edit/:breakId" element={<EditBreak />} />
                       <Route path="/customers" element={<Customers />} />
                       <Route path="/orders" element={<Orders />} />
                       <Route path="/category" element={<Category />} />
@@ -66,6 +79,9 @@ function App() {
                       <Route path="/tax/edit/:id" element={<EditTax />} />
                       <Route path="/products/edit/:id" element={<EditProduct />} />
                       <Route path="/products/detail/:id" element={<ProductDetail />} />
+                      <Route path="/vacation" element={<Vacation />} />
+                      <Route path="/vacation/add" element={<AddVacation />} />
+                      <Route path="/vacation/edit/:id" element={<EditVacation />} />
                       <Route path="/" element={<Products />} />
                     </Routes>
                   </div>
