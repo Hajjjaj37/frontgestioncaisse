@@ -5,6 +5,15 @@ import Login from './components/Login';
 import Products from './components/dashboard/Products';
 import Navbar from './components/Navbar';
 import AddProduct from './components/dashboard/AddProduct';
+import Category from './components/dashboard/Category';
+import AddCategory from './components/dashboard/AddCategory';
+import EditCategory from './components/dashboard/EditCategory';
+import Tax from './components/dashboard/Tax';
+import AddTax from './components/dashboard/AddTax';
+import EditTax from './components/dashboard/EditTax';
+import EditProduct from './components/dashboard/EditProduct';
+import ProductDetail from './components/dashboard/ProductDetail';
+import Employee from './components/dashboard/Employee';
 import './App.css';
 
 // Pages components
@@ -46,9 +55,17 @@ function App() {
                     <Routes>
                       <Route path="/products" element={<Products />} />
                       <Route path="/products/add" element={<AddProduct />} />
-                      <Route path="/employees" element={<Employees />} />
+                      <Route path="/employees" element={<Employee />} />
                       <Route path="/customers" element={<Customers />} />
                       <Route path="/orders" element={<Orders />} />
+                      <Route path="/category" element={<Category />} />
+                      <Route path="/category/add" element={<AddCategory />} />
+                      <Route path="/category/edit/:id" element={<EditCategory />} />
+                      <Route path="/tax" element={<Tax />} />
+                      <Route path="/tax/add" element={<AddTax />} />
+                      <Route path="/tax/edit/:id" element={<EditTax />} />
+                      <Route path="/products/edit/:id" element={<EditProduct />} />
+                      <Route path="/products/detail/:id" element={<ProductDetail />} />
                       <Route path="/" element={<Products />} />
                     </Routes>
                   </div>
