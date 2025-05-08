@@ -22,6 +22,9 @@ import EditBreak from './components/dashboard/EditBreak';
 import Vacation from './components/dashboard/Vacation';
 import AddVacation from './components/dashboard/AddVacation';
 import EditVacation from './components/dashboard/EditVacation';
+import Tracking from './components/dashboard/Tracking';
+import AddTracking from './components/dashboard/AddTracking';
+import EditTracking from './components/dashboard/EditTracking';
 import './App.css';
 
 // Pages components
@@ -82,6 +85,10 @@ function App() {
                       <Route path="/vacation" element={<Vacation />} />
                       <Route path="/vacation/add" element={<AddVacation />} />
                       <Route path="/vacation/edit/:id" element={<EditVacation />} />
+                      <Route path="/tracking" element={<Tracking />} />
+                      <Route path="/tracking/add" element={<AddTracking />} />
+                      <Route path="/tracking/add/:id" element={<AddTracking />} />
+                      <Route path="/tracking/edit/:id" element={<EditTracking />} />
                       <Route path="/" element={<Products />} />
                     </Routes>
                   </div>

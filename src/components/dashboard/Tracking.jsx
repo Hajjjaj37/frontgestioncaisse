@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const tableStyle = {
@@ -8,7 +8,6 @@ const tableStyle = {
   background: '#222b3a',
   borderRadius: '10px',
   overflow: 'hidden',
-  color: '#f5f6fa',
   marginTop: '24px',
   boxShadow: '0 2px 8px rgba(0,0,0,0.07)'
 };
@@ -29,18 +28,17 @@ const tdStyle = {
   color: '#f5f6fa',
 };
 
-const Pause = () => {
+const Tracking = () => {
   const [employees, setEmployees] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
   const [search, setSearch] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
     const token = localStorage.getItem('token');
     setLoading(true);
-    fetch('http://localhost:9090/api/employees/with-breaks', {
+    fetch('http://localhost:9090/api/employees/with-schedules', {
       headers: {
         'Authorization': `Bearer ${token}`
       }
@@ -63,21 +61,19 @@ const Pause = () => {
 
   const filteredEmployees = employees.filter(employee =>
     `${employee.firstName} ${employee.lastName}`.toLowerCase().includes(search.toLowerCase()) ||
-    employee.breaks.some(breakItem => 
-      breakItem.type?.toLowerCase().includes(search.toLowerCase()) ||
-      breakItem.status?.toLowerCase().includes(search.toLowerCase()) ||
-      breakItem.comment?.toLowerCase().includes(search.toLowerCase())
+    employee.schedules.some(schedule => 
+      schedule.notes?.toLowerCase().includes(search.toLowerCase())
     )
   );
 
-  const handleDelete = async (breakId) => {
-    if (!window.confirm('Êtes-vous sûr de vouloir supprimer cette pause ?')) {
+  const handleDelete = async (scheduleId) => {
+    if (!window.confirm('Êtes-vous sûr de vouloir supprimer cet horaire ?')) {
       return;
     }
 
     const token = localStorage.getItem('token');
     try {
-      const response = await fetch(`http://localhost:9090/api/breaks/${breakId}`, {
+      const response = await fetch(`http://localhost:9090/api/schedules/${scheduleId}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`
@@ -85,64 +81,55 @@ const Pause = () => {
       });
 
       if (!response.ok) {
-        throw new Error('Erreur lors de la suppression de la pause');
+        throw new Error('Erreur lors de la suppression');
       }
 
-      setSuccess('Pause supprimée avec succès !');
-      // Mettre à jour la liste des employés après la suppression
-      setEmployees(employees.map(employee => ({
-        ...employee,
-        breaks: employee.breaks.filter(b => b.id !== breakId)
+      // Mettre à jour la liste des employés
+      setEmployees(employees.map(emp => ({
+        ...emp,
+        schedules: emp.schedules.filter(s => s.id !== scheduleId)
       })));
-      
-      setTimeout(() => {
-        setSuccess('');
-      }, 3000);
     } catch (err) {
       setError(err.message);
-      setTimeout(() => {
-        setError('');
-      }, 3000);
     }
   };
 
   const formatDate = (dateString) => {
-    if (!dateString) return 'En cours';
+    if (!dateString) return 'Non définie';
     const date = new Date(dateString);
-    return date.toLocaleString();
+    return date.toLocaleDateString();
   };
 
   return (
     <div style={{ padding: '32px' }}>
       <div style={{ fontSize: '1.5rem', fontWeight: 'bold', marginBottom: '16px', color: '#222b3a' }}>
-        Home / Pause
+        Home / Tracking
       </div>
       <div style={{ fontSize: '2rem', fontWeight: 'bold', marginBottom: '24px', color: '#222b3a' }}>
-        Pauses
+        Suivi des horaires
       </div>
       {error && <div style={{ color: '#e74c3c', marginBottom: 12 }}>{error}</div>}
-      {success && <div style={{ color: '#1abc9c', marginBottom: 12 }}>{success}</div>}
       <div style={{ display: 'flex', gap: '16px', marginBottom: '24px' }}>
         <input
           type="text"
-          placeholder="Search by employee name, type, status or comment"
+          placeholder="Rechercher par nom d'employé ou notes"
           value={search}
           onChange={e => setSearch(e.target.value)}
           style={{ flex: 1, padding: '10px', borderRadius: '6px', border: '1px solid #2e3a4d', background: '#222b3a', color: '#f5f6fa' }}
         />
-        <button style={{ background: '#1abc9c', color: '#fff', border: 'none', padding: '10px 24px', borderRadius: '6px', fontWeight: 'bold', cursor: 'pointer' }}>Search</button>
+        <button style={{ background: '#1abc9c', color: '#fff', border: 'none', padding: '10px 24px', borderRadius: '6px', fontWeight: 'bold', cursor: 'pointer' }}>Rechercher</button>
         <button
           style={{ background: '#e67e22', color: '#fff', border: 'none', padding: '10px 24px', borderRadius: '6px', fontWeight: 'bold', cursor: 'pointer' }}
-          onClick={() => navigate('/dashboard/pause/add')}
+          onClick={() => navigate('/dashboard/tracking/add')}
         >
-          + Add New Pause
+          + Ajouter un horaire
         </button>
       </div>
       <table style={tableStyle}>
         <thead>
           <tr>
-            <th style={thStyle}>EMPLOYEE</th>
-            <th style={thStyle}>PAUSES</th>
+            <th style={thStyle}>EMPLOYÉ</th>
+            <th style={thStyle}>HORAIRES</th>
             <th style={thStyle}>ACTIONS</th>
           </tr>
         </thead>
@@ -152,7 +139,7 @@ const Pause = () => {
           ) : error ? (
             <tr><td style={tdStyle} colSpan={3} align="center">{error}</td></tr>
           ) : filteredEmployees.length === 0 ? (
-            <tr><td style={tdStyle} colSpan={3} align="center">No employees to display.</td></tr>
+            <tr><td style={tdStyle} colSpan={3} align="center">Aucun employé à afficher.</td></tr>
           ) : (
             filteredEmployees.map(employee => (
               <tr key={employee.id}>
@@ -176,38 +163,33 @@ const Pause = () => {
                       {employee.firstName[0]}{employee.lastName[0]}
                     </div>
                     <div>
-                      <div style={{ fontWeight: 'bold' }}>{`${employee.firstName} ${employee.lastName} (${employee.email})`}</div>
+                      <div style={{ fontWeight: 'bold' }}>{`${employee.firstName} ${employee.lastName}`}</div>
+                      <div style={{ color: '#95a5a6', fontSize: '0.9rem' }}>{employee.email}</div>
                     </div>
                   </div>
                 </td>
                 <td style={tdStyle}>
-                  {employee.breaks.length === 0 ? (
-                    <div style={{ color: '#95a5a6' }}>Aucune pause</div>
+                  {employee.schedules.length === 0 ? (
+                    <div style={{ color: '#95a5a6' }}>Aucun horaire</div>
                   ) : (
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                      {employee.breaks.map(breakItem => (
-                        <div key={breakItem.id} style={{ 
+                      {employee.schedules.map(schedule => (
+                        <div key={schedule.id} style={{ 
                           padding: '12px',
                           borderLeft: '4px solid #3498db',
                           background: '#2c3e50'
                         }}>
                           <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
-                            <span style={{ 
-                              color: breakItem.status === 'ACTIVE' ? '#2ecc71' : '#e74c3c',
-                              fontWeight: 'bold'
-                            }}>
-                              {breakItem.status}
-                            </span>
                             <span style={{ color: '#3498db', fontWeight: 'bold' }}>
-                              {breakItem.type}
+                              {formatDate(schedule.workDate)}
+                            </span>
+                            <span style={{ color: '#2ecc71', fontWeight: 'bold' }}>
+                              {schedule.startTime} - {schedule.endTime}
                             </span>
                           </div>
-                          <div style={{ color: '#ecf0f1', marginBottom: '4px' }}>
-                            {formatDate(breakItem.startTime)} - {formatDate(breakItem.endTime)}
-                          </div>
-                          {breakItem.comment && (
+                          {schedule.notes && (
                             <div style={{ color: '#95a5a6', fontSize: '0.9rem' }}>
-                              {breakItem.comment}
+                              {schedule.notes}
                             </div>
                           )}
                         </div>
@@ -226,12 +208,12 @@ const Pause = () => {
                         cursor: 'pointer',
                         borderRadius: '4px'
                       }}
-                      onClick={() => navigate(`/dashboard/pause/add/${employee.id}`)}
+                      onClick={() => navigate(`/dashboard/tracking/add/${employee.id}`)}
                     >
-                      + Nouvelle pause
+                      + Nouvel horaire
                     </button>
-                    {employee.breaks.map(breakItem => (
-                      <div key={breakItem.id} style={{ display: 'flex', gap: '8px' }}>
+                    {employee.schedules.map(schedule => (
+                      <div key={schedule.id} style={{ display: 'flex', gap: '8px' }}>
                         <button
                           style={{ 
                             flex: 1,
@@ -242,11 +224,11 @@ const Pause = () => {
                             cursor: 'pointer',
                             borderRadius: '4px'
                           }}
-                          onClick={() => navigate(`/dashboard/pause/edit/${breakItem.id}`)}
+                          onClick={() => navigate(`/dashboard/tracking/edit/${schedule.id}`)}
                         >
                           Modifier
                         </button>
-                        <button 
+                        <button
                           style={{ 
                             flex: 1,
                             background: '#e74c3c', 
@@ -256,7 +238,7 @@ const Pause = () => {
                             cursor: 'pointer',
                             borderRadius: '4px'
                           }}
-                          onClick={() => handleDelete(breakItem.id)}
+                          onClick={() => handleDelete(schedule.id)}
                         >
                           Supprimer
                         </button>
@@ -273,4 +255,4 @@ const Pause = () => {
   );
 };
 
-export default Pause; 
+export default Tracking; 
