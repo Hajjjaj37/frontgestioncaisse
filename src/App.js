@@ -28,6 +28,9 @@ import EditTracking from './components/dashboard/EditTracking';
 import Customers from './components/dashboard/Customers';
 import AddCustomer from './components/dashboard/AddCustomer';
 import EditCustomer from './components/dashboard/EditCustomer';
+import Suppliers from './components/dashboard/Suppliers';
+import AddFournisseurs from './components/dashboard/AddFournisseurs';
+import EditSuppliers from './components/dashboard/EditSuppliers';
 import './App.css';
 
 // Pages components
@@ -111,7 +114,10 @@ function App() {
                       <Route path="/tracking/add/:id" element={<AddTracking />} />
                       <Route path="/tracking/edit/:id" element={<EditTracking />} />
                       <Route path="/customers/add" element={<AddCustomer />} />
-                      <Route path="customers/edit/:id" element={<EditCustomer />} />
+                      <Route path="/customers/edit/:id" element={<EditCustomer />} />
+                      <Route path="/suppliers" element={<Suppliers />} />
+                      <Route path="/suppliers/add" element={<AddFournisseurs />} />
+                      <Route path="/suppliers/edit/:id" element={<EditSuppliers />} />
                       <Route path="/" element={<Products />} />
                     </Routes>
                   </div>

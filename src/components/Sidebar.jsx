@@ -40,6 +40,7 @@ const Sidebar = () => {
               <Link to="/dashboard/products" className={location.pathname === '/dashboard/products' ? 'sublink active' : 'sublink'}>Product</Link>
               <Link to="/dashboard/category" className={location.pathname === '/dashboard/category' ? 'sublink active' : 'sublink'}>Category</Link>
               <Link to="/dashboard/tax" className={location.pathname === '/dashboard/tax' ? 'sublink active' : 'sublink'}>TAX</Link>
+              <Link to="/dashboard/suppliers" className={location.pathname === '/dashboard/suppliers' ? 'sublink active' : 'sublink'}>Fournisseurs</Link>
             </div>
           )}
         </div>
