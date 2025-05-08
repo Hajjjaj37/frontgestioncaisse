@@ -60,7 +60,10 @@ const Sidebar = () => {
           )}
         </div>
         {/* Customers */}
-        <Link to="/dashboard/customers" className={`sidebar-link${location.pathname === '/dashboard/customers' ? ' active' : ''}`}>
+        <Link 
+          to="/dashboard/customers" 
+          className={`sidebar-link${location.pathname === '/dashboard/customers' ? ' active' : ''}`}
+        >
           <FaUsers className="sidebar-icon" />
           <span>Customers</span>
         </Link>

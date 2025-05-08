@@ -1,0 +1,127 @@
+.customers-container {
+  padding: 32px;
+}
+
+.customers-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.customers-title {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #222b3a;
+}
+
+.customers-breadcrumb {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #222b3a;
+  margin-bottom: 16px;
+}
+
+.customers-search {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.customers-search input {
+  flex: 1;
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #2e3a4d;
+  background: #222b3a;
+  color: #f5f6fa;
+}
+
+.customers-search button {
+  padding: 10px 24px;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  border: none;
+}
+
+.customers-search button:first-of-type {
+  background: #1abc9c;
+  color: #fff;
+}
+
+.customers-search button:last-of-type {
+  background: #e67e22;
+  color: #fff;
+}
+
+.customers-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: #222b3a;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-top: 24px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+}
+
+.customers-table th {
+  padding: 16px;
+  background: #2e3a4d;
+  color: #fff;
+  font-weight: bold;
+  font-size: 1.05rem;
+  border-bottom: 1px solid #31405a;
+  text-align: left;
+}
+
+.customers-table td {
+  padding: 14px;
+  text-align: left;
+  border-bottom: 1px solid #31405a;
+  color: #f5f6fa;
+}
+
+.customer-avatar {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  background: #3498db;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: bold;
+}
+
+.customer-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.customer-name {
+  font-weight: bold;
+}
+
+.customer-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.customer-actions button {
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  border: none;
+  color: #fff;
+}
+
+.customer-actions button:first-of-type {
+  background: #f39c12;
+}
+
+.customer-actions button:last-of-type {
+  background: #e74c3c;
+} 

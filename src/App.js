@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Sidebar from './components/Sidebar';
 import Login from './components/Login';
@@ -25,31 +25,52 @@ import EditVacation from './components/dashboard/EditVacation';
 import Tracking from './components/dashboard/Tracking';
 import AddTracking from './components/dashboard/AddTracking';
 import EditTracking from './components/dashboard/EditTracking';
+import Customers from './components/dashboard/Customers';
+import AddCustomer from './components/dashboard/AddCustomer';
+import EditCustomer from './components/dashboard/EditCustomer';
 import './App.css';
 
 // Pages components
 const Employees = () => <div className="content">Employees Page</div>;
-const Customers = () => <div className="content">Customers Page</div>;
+
 const Orders = () => <div className="content">Orders Page</div>;
 
 // Composant pour vérifier l'authentification
 const PrivateRoute = ({ children }) => {
   const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
-  const userRole = localStorage.getItem('userRole');
-  const token = localStorage.getItem('token');
-
-  if (!isAuthenticated || !token) {
-    return <Navigate to="/login" />;
-  }
-
-  if (userRole !== 'ADMIN') {
-    return <Navigate to="/login" />;
-  }
-
-  return children;
+  return isAuthenticated ? children : <Navigate to="/login" />;
 };
 
 function App() {
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [customerToDelete, setCustomerToDelete] = useState(null);
+
+  const handleDeleteClick = (customer) => {
+    setCustomerToDelete(customer);
+    setShowDeleteConfirm(true);
+  };
+
+  const handleDeleteConfirm = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      await fetch(`http://localhost:9090/api/customers/${customerToDelete.id}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      // Handle success
+    } catch (error) {
+      console.error('Error deleting customer:', error);
+      // Handle error
+    }
+    setShowDeleteConfirm(false);
+  };
+
+  const handleDeleteCancel = () => {
+    setShowDeleteConfirm(false);
+  };
+
   return (
     <Router>
       <Routes>
@@ -89,6 +110,8 @@ function App() {
                       <Route path="/tracking/add" element={<AddTracking />} />
                       <Route path="/tracking/add/:id" element={<AddTracking />} />
                       <Route path="/tracking/edit/:id" element={<EditTracking />} />
+                      <Route path="/customers/add" element={<AddCustomer />} />
+                      <Route path="customers/edit/:id" element={<EditCustomer />} />
                       <Route path="/" element={<Products />} />
                     </Routes>
                   </div>
